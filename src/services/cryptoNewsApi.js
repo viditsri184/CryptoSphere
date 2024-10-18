@@ -12,7 +12,7 @@ export const cryptoNewsApi = createApi({
     }),
     endpoints: (builder) => ({
         getCryptoNews: builder.query({
-            query: () => 'cryptodaily', // Endpoint to fetch daily cryptocurrency news
+            query: () => 'cryptodaily',
         }),
     }),
 });
