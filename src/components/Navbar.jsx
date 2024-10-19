@@ -1,6 +1,6 @@
-import { BulbOutlined, FundOutlined, HomeOutlined, MoneyCollectOutlined } from '@ant-design/icons';
-import { Avatar, Menu, Typography } from 'antd';
-import React from "react";
+import { BulbOutlined, FundOutlined, HomeOutlined, MenuOutlined, MoneyCollectOutlined } from '@ant-design/icons';
+import { Avatar, Menu, Typography, Button } from 'antd';
+import React , {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import icon from '../images/cryptocurrency.png';
 
@@ -16,11 +16,6 @@ const items = [
         icon: <FundOutlined />,
     },
     {
-        label: <Link to="/exchanges">Exchanges</Link>,
-        key: 'exchanges',
-        icon: <MoneyCollectOutlined />,
-    },
-    {
         label: <Link to="/news">News</Link>,
         key: 'news',
         icon: <BulbOutlined />,
@@ -28,6 +23,27 @@ const items = [
 ];
 
 export default function Navbar() {
+    const [activeMenu, setActiveMenu] = useState(true);
+    const [screenSize, setScreenSize] = useState(null);
+
+    useEffect(() => {
+        const handleResize = () => setScreenSize(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+
+        handleResize();
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    useEffect(() => {
+        if(screenSize < 768){
+            setActiveMenu(false);
+        }
+        else{
+            setActiveMenu(true);
+        }
+    }, [screenSize]);
+
     return (
         <div className="nav-container">
             <div className="logo-container">
@@ -35,8 +51,9 @@ export default function Navbar() {
                 <Typography.Title level={2} className="logo">
                     <Link to="/" >CryptoSphere</Link>
                 </Typography.Title>
+                <Button className='menu-control-container' onClick={() => setActiveMenu(!activeMenu)}><MenuOutlined /></Button>
             </div>
-            <Menu theme="dark" items={items} />
+            {activeMenu && (<Menu theme="dark" items={items} />)}
         </div>
     )
 }
